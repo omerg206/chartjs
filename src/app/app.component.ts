@@ -1,6 +1,5 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Chart, ChartType } from 'chart.js';
-import 'chartjs-plugin-zoom';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+
 export interface rawChartData {
   title: string;
   stack: string;
@@ -32,15 +31,17 @@ export interface ChartJsDataCollection {
 })
 export class AppComponent implements OnInit, OnDestroy {
 
-  ngOnInit(): void {
-    this.intervalId = setInterval(() => { this.updateDate() }, 2000)
-  }
+
   graphs: { title: string, stackNumber?: number }[] = [{ title: "chart 1", stackNumber: 3 }, { title: "chart 2" }]
   intervalId: any;
   rawData: rawChartData[] = [];
   chartJsData: ChartJsDataCollection = {};
-  timeFrameMilliSec: number = 2 * 60 * 1000;
+  timeFrameMilliSec: number = 1 * 20 * 1000;
 
+
+  ngOnInit(): void {
+    this.intervalId = setInterval(() => { this.updateDate() }, 1000)
+  }
   randomScalingFactor() {
     return (Math.random() > 0.5 ? 1.0 : -1.0) * Math.round(Math.random() * 100);
   }
