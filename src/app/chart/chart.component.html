@@ -1,0 +1,15 @@
+<!-- <canvas id="graph"  class="graph" #graph></canvas> -->
+
+<label for="graphTypes">Graph type</label>
+
+<select name="graphTypes" id="graphTypes" #selection (change)="changeGraphType($any( selection.value))">
+  <option value="bar">Bar</option>
+  <option value="line">Line</option>
+</select>
+
+ <button (click)="resetZoom()">Reset zoom</button>
+ <!-- <button (click)="updateDate()">randomize</button> -->
+
+<div style="width:100%;">
+	<canvas id="myChart" width="700" height="250" #graph></canvas>
+</div>
