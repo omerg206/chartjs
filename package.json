@@ -23,6 +23,7 @@
     "@angular/router": "~11.2.0",
     "@types/lodash": "^4.14.168",
     "chart.js": "^2.9.4",
+    "chartjs-plugin-streaming": "^1.8.0",
     "chartjs-plugin-zoom": "^0.7.7",
     "lodash": "^4.17.21",
     "rxjs": "~6.6.0",
