@@ -88,7 +88,7 @@ export class ChartComponent implements AfterViewInit {
             time: {
               unit: 'second',
               // round: 'second',
-              stepSize: 5,
+              // stepSize: 5,
               displayFormats: {
                 second: "HH:mm:ss"
               },
@@ -118,7 +118,7 @@ export class ChartComponent implements AfterViewInit {
             // Container for pan options
             pan: {
               // Boolean to enable panning
-              enabled: true,
+              enabled: false,
 
               // Panning directions. Remove the appropriate direction to disable
               // Eg. 'y' would only allow panning in the y direction
@@ -146,7 +146,7 @@ export class ChartComponent implements AfterViewInit {
               // rangeMin: {
               //   x: 1000
               // },
-              threshold: 10
+              // threshold: 10
             }
           }
         }
@@ -167,6 +167,9 @@ export class ChartComponent implements AfterViewInit {
 
   resetZoom() {
     (this.myChart as any).resetZoom();
+    console.log(this.myChart);
+
+    // this.myChart.update({ duration: 0, lazy: true });
   }
 
 
@@ -176,9 +179,8 @@ export class ChartComponent implements AfterViewInit {
       this.myChart.data.datasets[dataSetIdx].data = ele;
       ++dataSetIdx;
     })
-    console.log(this.myChart);
     if (this.myChart) {
-      this.myChart.update();
+      this.myChart.update({ duration: 0 });
     }
 
   }
