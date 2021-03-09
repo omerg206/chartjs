@@ -88,7 +88,7 @@ export class ChartComponent implements AfterViewInit {
             time: {
               unit: 'second',
               // round: 'second',
-              // stepSize: 5,
+              stepSize: 5,
               displayFormats: {
                 second: "HH:mm:ss"
               },
@@ -96,6 +96,11 @@ export class ChartComponent implements AfterViewInit {
               scaleLabel: {
                 display: true,
                 labelString: "Date"
+              },
+              ticks: {
+                autoSkip: true,
+                maxRotation: 0,
+                minRotation: 0
               }
 
             }
@@ -116,37 +121,57 @@ export class ChartComponent implements AfterViewInit {
         plugins: {
           zoom: {
             // Container for pan options
-            pan: {
-              // Boolean to enable panning
-              enabled: false,
+            // pan: {
+            //   // Boolean to enable panning
+            //   enabled: true,
 
-              // Panning directions. Remove the appropriate direction to disable
-              // Eg. 'y' would only allow panning in the y direction
-              mode: 'xy',
-              // rangeMax: {
-              //   x: 4000
-              // },
-              // rangeMin: {
-              //   x: 0
-              // }
-            },
+            //   // Panning directions. Remove the appropriate direction to disable
+            //   // Eg. 'y' would only allow panning in the y direction
+            //   mode: 'xy',
+            //   // rangeMax: {
+            //   //   x: Date.now() + 1* 60*1000,
+            //   //   y: 10
+            //   // },
+            //   // rangeMin: {
+            //   //   x: Date.now() - 1* 60*1000,
+            //   //   y:0
+            //   // }
+            // },
 
             // Container for zoom options
             zoom: {
               // Boolean to enable zooming
               enabled: true,
-              // drag: true,
+               drag: {
+               // Drag-to-zoom effect can be customized
+                drag: {
+                	 borderColor: 'rgba(225,225,225,0.3)',
+                	 borderWidth: 5,
+                	 backgroundColor: 'rgb(225,225,225)',
+                	 animationDuration: 0
+                }
+               },
 
               // Zooming directions. Remove the appropriate direction to disable
               // Eg. 'y' would only allow zooming in the y direction
               mode: 'xy',
               // rangeMax: {
-              //   x: 20000
+              //   x: Date.now() + 1* 60*1000,
+              //   y: 10
               // },
               // rangeMin: {
-              //   x: 1000
+              //   x: Date.now() - 1* 60*1000,
+              //   y:0
               // },
-              // threshold: 10
+               threshold: 10,
+              //  onZoom: function({chart}: {chart: Chart}) {
+              //   chart.options.plugins.zoom.zoom.rangeMax =  Date.now() + 1*60*1000;
+              //   chart.options.plugins.zoom.zoom.rangeMin = Date.now() - 1*60*1000;
+              //   chart.options.plugins.zoom.pan.rangeMax =  Date.now() + 1*60*1000;
+              //   chart.options.plugins.zoom.pan.rangeMin = Date.now() - 1*60*1000;
+              //   console.log(chart);
+              //   chart.update()
+              //   },
             }
           }
         }
@@ -180,7 +205,7 @@ export class ChartComponent implements AfterViewInit {
       ++dataSetIdx;
     })
     if (this.myChart) {
-      this.myChart.update({ duration: 0 });
+      this.myChart.update({duration:0});
     }
 
   }
