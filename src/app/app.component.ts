@@ -1,3 +1,4 @@
+import { KeyValue } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
 export interface rawChartData {
@@ -16,12 +17,12 @@ export interface ChartJsData {
 }
 
 export interface ChartJsSingleGraphData {
-  [stack: string] :   Chart.ChartPoint[]
+  [stack: string]: Chart.ChartPoint[]
 
 }
 
 export interface ChartJsDataCollection {
-  [title: string] :  ChartJsSingleGraphData
+  [title: string]: ChartJsSingleGraphData
 
 }
 @Component({
@@ -32,7 +33,16 @@ export interface ChartJsDataCollection {
 export class AppComponent implements OnInit, OnDestroy {
 
 
-  graphs: { title: string, stackNumber?: number }[] = [{ title: "chart 1", stackNumber: 3 }, { title: "chart 2" }]
+  graphs: { title: string, stackNumber?: number }[] = [
+    { title: "chart 1", stackNumber: 3 },
+    { title: "chart 2" },
+    { title: "chart 3" },
+    { title: "chart 4" },
+    { title: "chart 5" },
+    { title: "chart 6" },
+    { title: "chart 7" },
+
+  ]
   intervalId: any;
   rawData: rawChartData[] = [];
   chartJsData: ChartJsDataCollection = {};
@@ -79,7 +89,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
 
   convertChartDataToChartJs(rawData: rawChartData[]) {
-    this.chartJsData = rawData.reduce((acc: ChartJsDataCollection, ele: rawChartData ) => {
+    this.chartJsData = rawData.reduce((acc: ChartJsDataCollection, ele: rawChartData) => {
       if (!acc[ele.title]) {
         acc[ele.title] = {};
       }
@@ -88,9 +98,14 @@ export class AppComponent implements OnInit, OnDestroy {
         acc[ele.title][ele.stack] = [];
       }
 
-      acc[ele.title][ele.stack].push({x: ele.date, y: ele.value})
+      acc[ele.title][ele.stack].push({ x: ele.date, y: ele.value })
       return acc;
     }, {})
+  }
+
+  trackByFn(index, item: KeyValue<string, ChartJsSingleGraphData>) {
+
+    return item.key
   }
 
   ngOnDestroy(): void {

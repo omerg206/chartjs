@@ -1,1 +1,14 @@
-<app-chart [data]="chartJsData['chart 1']"></app-chart>
+<div class="container">
+
+  <div class="header">
+    Header
+  </div>
+
+  <div class="grid">
+    <div *ngFor="let chart of chartJsData | keyvalue; trackBy: trackByFn" class="chart">
+      <app-chart  [title]="chart.key" [data]="chartJsData[chart.key]"></app-chart>
+    </div>
+  </div>
+</div>
+
+

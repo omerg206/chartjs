@@ -1,4 +1,34 @@
-.graph {
-  height: 400px !important;
-  width: 400px !important;
+// .graph {
+//   height: 400px !important;
+//   width: 400px !important;
+// }
+
+.contianer{
+  display: flex;
+  flex: 1 1 100%;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  justify-content: stretch;
+  align-items: stretch;
+  position: relative;
+
+  .above-graph {
+    flex: 1 1;
+  }
+
+  .chart-container {
+    position: relative;
+    justify-self: stretch;
+    align-self: stretch;
+     display: inline-flex;
+     height: 90%;
+  }
+}
+
+
+:host{
+  height: 100%;
+  width: 100%;
+  display: block;
 }
