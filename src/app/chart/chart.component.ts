@@ -211,8 +211,12 @@ export class ChartComponent implements OnInit {
 
 
   changeGraphType(graphType: ChartType) {
-    this.myChart.destroy();
-    this.myChart = new Chart(this.ctx, { ...this.config, type: graphType });
+    if (this.myChart) {
+      this.myChart.destroy();
+      this.myChart = new Chart(this.ctx, { ...this.config, type: graphType });
+    }
+
+
   }
 
   resetZoom() {
