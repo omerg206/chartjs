@@ -26,6 +26,8 @@ export interface ChartJsDataCollection {
   [title: string]: ChartJsSingleGraphData
 
 }
+
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -49,11 +51,11 @@ export class AppComponent implements OnInit, OnDestroy {
   intervalId: any;
   rawData: rawChartData[] = [];
   chartJsData: ChartJsDataCollection = {};
-  timeFrameMilliSec: number = 1 * 20 * 1000;
+  timeFrameMilliSec: number = 3 * 60 * 1000;
 
 
   ngOnInit(): void {
-    this.intervalId = setInterval(() => { this.updateDate() }, 3000)
+    this.intervalId = setInterval(() => { this.updateDate() }, 1000)
   }
   randomScalingFactor() {
     return (Math.random() > 0.5 ? 1.0 : -1.0) * Math.round(Math.random() * 100);
@@ -61,7 +63,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   updateDate() {
     const maxAllowedDate = Date.now() - this.timeFrameMilliSec;
-    this.rawData = this.rawData.filter((ele: rawChartData) => ele.date >= maxAllowedDate)
+    this.rawData = this.rawData
 
     this.graphs.forEach((graph: { title: string, stackNumber?: number }) => {
 

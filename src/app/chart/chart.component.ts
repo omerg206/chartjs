@@ -1,6 +1,9 @@
 import { Component, OnInit, ChangeDetectionStrategy, AfterViewInit, ElementRef, ViewChild, Input } from '@angular/core';
 import { ChartType, Chart, ChartDataSets } from 'chart.js';
 import 'chartjs-plugin-zoom';
+// import 'chartjs-plugin-streaming';
+ import  '../../../node_modules/@taeuk-gang/chartjs-plugin-streaming/dist/chartjs-plugin-streaming';
+
 import { ChartJsSingleGraphData } from '../app.component';
 import { forEach } from 'lodash';
 
@@ -30,6 +33,8 @@ const COLORS: Pick<ChartDataSets, 'backgroundColor' | "hoverBackgroundColor" | "
   hoverBorderColor: "brown",
 }]
 
+
+
 @Component({
   selector: 'app-chart',
   templateUrl: './chart.component.html',
@@ -38,7 +43,7 @@ const COLORS: Pick<ChartDataSets, 'backgroundColor' | "hoverBackgroundColor" | "
 })
 
 
-export class ChartComponent implements OnInit {
+export class ChartComponent implements OnInit, AfterViewInit {
   ctx: CanvasRenderingContext2D | null = null;
   myChart: Chart | null = null;
   config: Chart.ChartConfiguration | null = null;
@@ -65,6 +70,17 @@ export class ChartComponent implements OnInit {
 
 
   constructor() { }
+
+  ngOnInit(): void {
+
+  }
+
+  ngAfterViewInit(): void {
+    if (!this.myChart) {
+      this.initChart();
+    }
+  }
+
 
   initChart() {
     this.ctx = this.graph.nativeElement.getContext('2d');
@@ -106,7 +122,16 @@ export class ChartComponent implements OnInit {
             display: true,
             offset: true,
             // distribution: 'series',
-            type: "time",
+            type: "realtime",
+            realtime: {
+              duration: 60000,
+              // ttl: 60000,
+              refresh: 1000,
+              delay: 2000,
+              frameRate: 1,
+              pause: false
+
+            },
             time: {
               unit: 'second',
               // round: 'second',
@@ -164,15 +189,15 @@ export class ChartComponent implements OnInit {
             zoom: {
               // Boolean to enable zooming
               enabled: true,
-              drag: {
-                // Drag-to-zoom effect can be customized
-                drag: {
-                  borderColor: 'rgba(225,225,225,0.3)',
-                  borderWidth: 5,
-                  backgroundColor: 'rgb(225,225,225)',
-                  animationDuration: 0
-                }
-              },
+              // drag: {
+              //   // Drag-to-zoom effect can be customized
+              //   drag: {
+              //     borderColor: 'rgba(225,225,225,0.3)',
+              //     borderWidth: 5,
+              //     backgroundColor: 'rgb(225,225,225)',
+              //     animationDuration: 0
+              //   }
+              // },
 
               // Zooming directions. Remove the appropriate direction to disable
               // Eg. 'y' would only allow zooming in the y direction
@@ -204,11 +229,6 @@ export class ChartComponent implements OnInit {
     this.myChart = new Chart(this.ctx, this.config);
   }
 
-  ngOnInit(): void {
-
-
-  }
-
 
   changeGraphType(graphType: ChartType) {
     if (this.myChart) {
@@ -218,6 +238,8 @@ export class ChartComponent implements OnInit {
 
 
   }
+
+
 
   resetZoom() {
     (this.myChart as any).resetZoom();
@@ -237,7 +259,7 @@ export class ChartComponent implements OnInit {
       ++dataSetIdx;
     })
 
-    this.myChart.update({ duration: 0 });
+    // this.myChart.update();
   }
 
 
