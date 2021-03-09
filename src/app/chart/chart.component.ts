@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy, AfterViewInit, ElementRef, 
 import { ChartType, Chart, ChartDataSets } from 'chart.js';
 import 'chartjs-plugin-zoom';
 // import 'chartjs-plugin-streaming';
+import './chart-plugins/chartjs-plugin-crosshair';
 import '@taeuk-gang/chartjs-plugin-streaming';
 
 import { ChartJsSingleGraphData } from '../app.component';
@@ -79,6 +80,12 @@ export class ChartComponent implements OnInit, AfterViewInit {
     if (!this.myChart) {
       this.initChart();
     }
+
+    // setTimeout(() => {
+    //   this.myChart.options.scales.xAxes[0].realtime.pause = true;
+    //   this.myChart.options.plugins.crosshair.zoom.enable =true;
+
+    // }, 3000)
   }
 
 
@@ -112,7 +119,7 @@ export class ChartComponent implements OnInit, AfterViewInit {
           text: this.title
         },
         tooltips: {
-          mode: 'single',
+          mode: 'index',
           intersect: false
         },
         animation: {
@@ -174,6 +181,21 @@ export class ChartComponent implements OnInit, AfterViewInit {
         }]
       },
       plugins: {
+        crosshair: {
+          line: {
+            color: '#F66',  // crosshair line color
+            width: 1        // crosshair line width
+          },
+          sync: {
+            enabled: true,            // enable trace line syncing with other charts
+            group: 1,                 // chart group
+            suppressTooltips: false   // suppress tooltips when showing a synced tracer
+          },
+          zoom: {
+            enable: true,
+            zoomboxBackgroundColor: 'red',
+          }
+        },
         zoom: {
           // Container for pan options
           // pan: {
@@ -266,6 +288,7 @@ updateDate(data: ChartJsSingleGraphData) {
     this.myChart.data.datasets[dataSetIdx].data = ele;
     ++dataSetIdx;
   })
+
 
   // this.myChart.update();
 }
