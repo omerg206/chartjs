@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, AfterViewInit, ElementRef, ViewChild, Input } from '@angular/core';
 import { ChartType, Chart, ChartDataSets } from 'chart.js';
-// import 'chartjs-plugin-zoom';
+import 'chartjs-plugin-zoom';
 // import 'chartjs-plugin-streaming';
 import '@taeuk-gang/chartjs-plugin-streaming';
 
@@ -115,6 +115,14 @@ export class ChartComponent implements OnInit, AfterViewInit {
           mode: 'single',
           intersect: false
         },
+        animation: {
+           duration: 500 // general animation time
+        },
+        hover: {
+          animationDuration: 0 // duration of animations when hovering an item
+        },
+        responsiveAnimationDuration: 0,// animation duration after a resize
+
         scales: {
 
           xAxes: [{
@@ -125,146 +133,146 @@ export class ChartComponent implements OnInit, AfterViewInit {
             type: "realtime",
             realtime: {
               duration: 60000,
-              // ttl: 60000,
-              refresh: 1000,
-              // delay: 2000,
-              frameRate: 1,
-              pause: false
+            ttl: 60000,
+            refresh: 1000,
+            delay: 0,
+            frameRate: 0,
 
+
+          },
+          time: {
+            unit: 'second',
+            // round: 'second',
+            stepSize: 5,
+            displayFormats: {
+              second: "HH:mm:ss"
             },
-            time: {
-              unit: 'second',
-              // round: 'second',
-              stepSize: 5,
-              displayFormats: {
-                second: "HH:mm:ss"
-              },
-              // parser: "ss",
-              scaleLabel: {
-                display: true,
-                labelString: "Date"
-              },
-              ticks: {
-                autoSkip: true,
-                maxRotation: 0,
-                minRotation: 0
-              }
-
-            }
-          }],
-          yAxes: [{
-            stacked: true,
-            display: true,
+            // parser: "ss",
             scaleLabel: {
-              display: false,
-              labelString: 'value'
+              display: true,
+              labelString: "Date"
             },
-            // ticks: {
-            //   // beginAtZero: true
-            // }
+            ticks: {
+              autoSkip: true,
+              maxRotation: 0,
+              minRotation: 0
+            }
 
-          }]
-        },
-        plugins: {
+          }
+        }],
+        yAxes: [{
+          stacked: true,
+          display: true,
+          scaleLabel: {
+            display: false,
+            labelString: 'value'
+          },
+          // ticks: {
+          //   // beginAtZero: true
+          // }
+
+        }]
+      },
+      plugins: {
+        zoom: {
+          // Container for pan options
+          // pan: {
+          //   // Boolean to enable panning
+          //   enabled: true,
+
+          //   // Panning directions. Remove the appropriate direction to disable
+          //   // Eg. 'y' would only allow panning in the y direction
+          //   mode: 'xy',
+          //   // rangeMax: {
+          //   //   x: Date.now() + 1* 60*1000,
+          //   //   y: 10
+          //   // },
+          //   // rangeMin: {
+          //   //   x: Date.now() - 1* 60*1000,
+          //   //   y:0
+          //   // }
+          // },
+
+          // Container for zoom options
           zoom: {
-            // Container for pan options
-            // pan: {
-            //   // Boolean to enable panning
-            //   enabled: true,
-
-            //   // Panning directions. Remove the appropriate direction to disable
-            //   // Eg. 'y' would only allow panning in the y direction
-            //   mode: 'xy',
-            //   // rangeMax: {
-            //   //   x: Date.now() + 1* 60*1000,
-            //   //   y: 10
-            //   // },
-            //   // rangeMin: {
-            //   //   x: Date.now() - 1* 60*1000,
-            //   //   y:0
-            //   // }
+            // Boolean to enable zooming
+            enabled: true,
+            // drag: {
+            //   // Drag-to-zoom effect can be customized
+            //   drag: {
+            //     borderColor: 'rgba(225,225,225,0.3)',
+            //     borderWidth: 5,
+            //     backgroundColor: 'rgb(225,225,225)',
+            //     animationDuration: 0
+            //   }
             // },
 
-            // Container for zoom options
-            zoom: {
-              // Boolean to enable zooming
-              enabled: true,
-              // drag: {
-              //   // Drag-to-zoom effect can be customized
-              //   drag: {
-              //     borderColor: 'rgba(225,225,225,0.3)',
-              //     borderWidth: 5,
-              //     backgroundColor: 'rgb(225,225,225)',
-              //     animationDuration: 0
-              //   }
-              // },
-
-              // Zooming directions. Remove the appropriate direction to disable
-              // Eg. 'y' would only allow zooming in the y direction
-              mode: 'xy',
-              // rangeMax: {
-              //   x: Date.now() + 1* 60*1000,
-              //   y: 10
-              // },
-              // rangeMin: {
-              //   x: Date.now() - 1* 60*1000,
-              //   y:0
-              // },
-              threshold: 10,
-              //  onZoom: function({chart}: {chart: Chart}) {
-              //   chart.options.plugins.zoom.zoom.rangeMax =  Date.now() + 1*60*1000;
-              //   chart.options.plugins.zoom.zoom.rangeMin = Date.now() - 1*60*1000;
-              //   chart.options.plugins.zoom.pan.rangeMax =  Date.now() + 1*60*1000;
-              //   chart.options.plugins.zoom.pan.rangeMin = Date.now() - 1*60*1000;
-              //   console.log(chart);
-              //   chart.update()
-              //   },
-            }
+            // Zooming directions. Remove the appropriate direction to disable
+            // Eg. 'y' would only allow zooming in the y direction
+            mode: 'xy',
+            // rangeMax: {
+            //   x: Date.now() + 1* 60*1000,
+            //   y: 10
+            // },
+            // rangeMin: {
+            //   x: Date.now() - 1* 60*1000,
+            //   y:0
+            // },
+            threshold: 10,
+            //  onZoom: function({chart}: {chart: Chart}) {
+            //   chart.options.plugins.zoom.zoom.rangeMax =  Date.now() + 1*60*1000;
+            //   chart.options.plugins.zoom.zoom.rangeMin = Date.now() - 1*60*1000;
+            //   chart.options.plugins.zoom.pan.rangeMax =  Date.now() + 1*60*1000;
+            //   chart.options.plugins.zoom.pan.rangeMin = Date.now() - 1*60*1000;
+            //   console.log(chart);
+            //   chart.update()
+            //   },
           }
         }
       }
     }
+  }
 
 
     this.myChart = new Chart(this.ctx, this.config);
   }
 
 
-  changeGraphType(graphType: ChartType) {
-    if (this.myChart) {
-      this.myChart.destroy();
-      this.myChart = new Chart(this.ctx, { ...this.config, type: graphType });
+changeGraphType(graphType: ChartType) {
+  if (this.myChart) {
+    this.myChart.destroy();
+    this.myChart = new Chart(this.ctx, { ...this.config, type: graphType });
+  }
+
+
+}
+
+
+
+resetZoom() {
+  (this.myChart as any).resetZoom();
+  console.log(this.myChart);
+
+  // this.myChart.update({ duration: 0, lazy: true });
+}
+
+
+updateDate(data: ChartJsSingleGraphData) {
+  let dataSetIdx = 0;
+  forEach(data, (ele: Chart.ChartPoint[], key: string) => {
+    if (!this.myChart.data.datasets[dataSetIdx]) {
+      this.myChart.data.datasets[dataSetIdx] = { ...COLORS[dataSetIdx], ...defaultDataSetOptions, label: `${defaultDataSetOptions.label} ${dataSetIdx + 1}` }
     }
+    this.myChart.data.datasets[dataSetIdx].data = ele;
+    ++dataSetIdx;
+  })
+
+  // this.myChart.update();
+}
 
 
-  }
-
-
-
-  resetZoom() {
-    (this.myChart as any).resetZoom();
-    console.log(this.myChart);
-
-    // this.myChart.update({ duration: 0, lazy: true });
-  }
-
-
-  updateDate(data: ChartJsSingleGraphData) {
-    let dataSetIdx = 0;
-    forEach(data, (ele: Chart.ChartPoint[], key: string) => {
-      if (!this.myChart.data.datasets[dataSetIdx]) {
-        this.myChart.data.datasets[dataSetIdx] = { ...COLORS[dataSetIdx], ...defaultDataSetOptions, label: `${defaultDataSetOptions.label} ${dataSetIdx + 1}` }
-      }
-      this.myChart.data.datasets[dataSetIdx].data = ele;
-      ++dataSetIdx;
-    })
-
-    // this.myChart.update();
-  }
-
-
-  randomScalingFactor() {
-    return (Math.random() > 0.5 ? 1.0 : -1.0) * Math.round(Math.random() * 100);
-  }
+randomScalingFactor() {
+  return (Math.random() > 0.5 ? 1.0 : -1.0) * Math.round(Math.random() * 100);
+}
 
 }
