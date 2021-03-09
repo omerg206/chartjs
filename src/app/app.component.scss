@@ -3,7 +3,6 @@
   width: 100%;
   background: #64595965;
   overflow: hidden;
-  pos
 
   .header {
     background: rgb(50, 10, 224);
@@ -19,14 +18,14 @@
     padding: 1%;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    row-gap: 1.6rem;
-    column-gap: 1.6rem;
+    row-gap: 5px;
+    column-gap: 5px;
     background: antiquewhite;
     // align-items: center;
     // justify-items: center;
 
     .chart{
-      // width: 100%;
+      width: 100%;
     }
   }
 

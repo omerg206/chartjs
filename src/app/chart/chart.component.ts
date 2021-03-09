@@ -5,13 +5,13 @@ import { ChartJsSingleGraphData } from '../app.component';
 import { forEach } from 'lodash';
 
 
-const defaultDataSetOptions : Pick<ChartDataSets, "hoverBorderWidth" | "borderJoinStyle" |  "label">= {
+const defaultDataSetOptions: Pick<ChartDataSets, "hoverBorderWidth" | "borderJoinStyle" | "label"> = {
   hoverBorderWidth: 2,
   borderJoinStyle: 'round',
   label: "Dataset"
 }
 
-const COLORS: Pick<ChartDataSets, 'backgroundColor' | "hoverBackgroundColor" |  "borderColor"| "hoverBorderColor">[] = [{
+const COLORS: Pick<ChartDataSets, 'backgroundColor' | "hoverBackgroundColor" | "borderColor" | "hoverBorderColor">[] = [{
   backgroundColor: "rgba(54, 162, 235,0.9)",
   hoverBackgroundColor: "rgba(54, 162, 235, 1)",
   borderColor: "rgba(54, 162, 235,0.9)",
@@ -74,6 +74,14 @@ export class ChartComponent implements OnInit {
             fill: false
           }
         },
+        legend: {
+          align: 'start',
+          fullWidth: false,
+          labels: {
+            boxWidth: 10
+          },
+          position: 'left'
+        },
         responsive: true,
         maintainAspectRatio: false,
         title: {
@@ -81,7 +89,7 @@ export class ChartComponent implements OnInit {
           text: this.title
         },
         tooltips: {
-          mode: "index",
+          mode: 'single',
           intersect: false
         },
         scales: {
@@ -116,7 +124,7 @@ export class ChartComponent implements OnInit {
             stacked: true,
             display: true,
             scaleLabel: {
-              display: true,
+              display: false,
               labelString: 'value'
             },
             // ticks: {
@@ -212,7 +220,7 @@ export class ChartComponent implements OnInit {
     let dataSetIdx = 0;
     forEach(data, (ele: Chart.ChartPoint[], key: string) => {
       if (!this.myChart.data.datasets[dataSetIdx]) {
-        this.myChart.data.datasets[dataSetIdx] = {...COLORS[dataSetIdx],...defaultDataSetOptions, label: `${defaultDataSetOptions.label} ${ dataSetIdx + 1}`}
+        this.myChart.data.datasets[dataSetIdx] = { ...COLORS[dataSetIdx], ...defaultDataSetOptions, label: `${defaultDataSetOptions.label} ${dataSetIdx + 1}` }
       }
       this.myChart.data.datasets[dataSetIdx].data = ele;
       ++dataSetIdx;
