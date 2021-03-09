@@ -43,7 +43,14 @@ export class ChartComponent implements OnInit {
   myChart: Chart | null = null;
   config: Chart.ChartConfiguration | null = null;
 
+
+  @Input() set chartType(val: ChartType) {
+    this.changeGraphType(val)
+  }
+
   @Input() title: string | null = null;
+
+
 
   @Input() set data(val: ChartJsSingleGraphData) {
     if (!this.myChart) {

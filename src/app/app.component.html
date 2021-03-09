@@ -4,9 +4,16 @@
     Header
   </div>
 
+  <label for="graphTypes">Graph type</label>
+
+  <select name="graphTypes" id="graphTypes" #selection (change)="onchangeGraphType($any( selection.value))">
+    <option value="bar">Bar</option>
+    <option value="line">Line</option>
+  </select>
+
   <div class="grid">
     <div *ngFor="let chart of chartJsData | keyvalue; trackBy: trackByFn" class="chart">
-      <app-chart  [title]="chart.key" [data]="chartJsData[chart.key]"></app-chart>
+      <app-chart  [chartType]="graphType" [title]="chart.key" [data]="chartJsData[chart.key]"></app-chart>
     </div>
   </div>
 </div>

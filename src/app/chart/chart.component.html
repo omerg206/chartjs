@@ -1,12 +1,7 @@
 <!-- <canvas id="graph"  class="graph" #graph></canvas> -->
 <div class="contianer">
   <div class="above-graph">
-    <label for="graphTypes">Graph type</label>
-
-    <select name="graphTypes" id="graphTypes" #selection (change)="changeGraphType($any( selection.value))">
-      <option value="bar">Bar</option>
-      <option value="line">Line</option>
-    </select>
+    
     <button (click)="resetZoom()">Reset zoom</button>
   </div>
 

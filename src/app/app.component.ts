@@ -1,3 +1,4 @@
+import { ChartType } from 'chart.js';
 import { KeyValue } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
@@ -43,6 +44,8 @@ export class AppComponent implements OnInit, OnDestroy {
     { title: "chart 7" },
 
   ]
+
+  graphType: ChartType = 'bar'
   intervalId: any;
   rawData: rawChartData[] = [];
   chartJsData: ChartJsDataCollection = {};
@@ -50,7 +53,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
-    this.intervalId = setInterval(() => { this.updateDate() }, 1000)
+    this.intervalId = setInterval(() => { this.updateDate() }, 3000)
   }
   randomScalingFactor() {
     return (Math.random() > 0.5 ? 1.0 : -1.0) * Math.round(Math.random() * 100);
@@ -106,6 +109,10 @@ export class AppComponent implements OnInit, OnDestroy {
   trackByFn(index, item: KeyValue<string, ChartJsSingleGraphData>) {
 
     return item.key
+  }
+
+  onchangeGraphType(graphType: ChartType) {
+    this.graphType =graphType
   }
 
   ngOnDestroy(): void {
