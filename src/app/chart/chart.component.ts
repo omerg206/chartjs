@@ -1,8 +1,8 @@
 import { Component, OnInit, ChangeDetectionStrategy, AfterViewInit, ElementRef, ViewChild, Input } from '@angular/core';
 import { ChartType, Chart, ChartDataSets } from 'chart.js';
-import 'chartjs-plugin-zoom';
+// import 'chartjs-plugin-zoom';
 // import 'chartjs-plugin-streaming';
- import  '../../../node_modules/@taeuk-gang/chartjs-plugin-streaming/dist/chartjs-plugin-streaming';
+ import  '@taeuk-gang/chartjs-plugin-streaming';
 
 import { ChartJsSingleGraphData } from '../app.component';
 import { forEach } from 'lodash';
