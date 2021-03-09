@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy, AfterViewInit, ElementRef, 
 import { ChartType, Chart, ChartDataSets } from 'chart.js';
 // import 'chartjs-plugin-zoom';
 // import 'chartjs-plugin-streaming';
- import  '@taeuk-gang/chartjs-plugin-streaming';
+import '@taeuk-gang/chartjs-plugin-streaming';
 
 import { ChartJsSingleGraphData } from '../app.component';
 import { forEach } from 'lodash';
@@ -127,7 +127,7 @@ export class ChartComponent implements OnInit, AfterViewInit {
               duration: 60000,
               // ttl: 60000,
               refresh: 1000,
-              delay: 2000,
+              // delay: 2000,
               frameRate: 1,
               pause: false
 
