@@ -1,5 +1,34 @@
 
 declare namespace Chart {
+
+  interface ChartPluginsOptions {
+    crosshair?: CrossHairPlugin
+  }
+  interface CrossHairPlugin {
+    line?: {
+      color: ChartColor,  // crosshair line color
+      width: number       // crosshair line width
+    },
+    sync?: {
+      enabled: boolean,            // enable trace line syncing with other charts
+      group: number,                 // chart group
+      suppressTooltips: boolean   // suppress tooltips when showing a synced tracer
+    },
+    zoom?: {
+      enabled: boolean,
+      zoomboxBackgroundColor: ChartColor,
+      zoomboxBorderColor: ChartColor,
+      zoomButtonText: string,
+      zoomButtonClass: string,
+    },
+    snap?: {
+      enabled: boolean,
+    },
+    callbacks?: {
+      beforeZoom?: (start: any, end: any) => boolean
+      afterZoom?: (start: any, end: any) => boolean
+    }
+  }
   interface ZoomAndPan {
     enabled?: boolean;
     mode?: 'x' | 'y' | 'xy';

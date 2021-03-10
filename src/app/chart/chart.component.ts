@@ -1,8 +1,8 @@
-import { Component, OnInit, ChangeDetectionStrategy, AfterViewInit, ElementRef, ViewChild, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, AfterViewInit, ElementRef, ViewChild, Input, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { ChartType, Chart, ChartDataSets, ScaleType } from 'chart.js';
 import 'chartjs-plugin-zoom';
 // import 'chartjs-plugin-streaming';
-// import './chart-plugins/chartjs-plugin-crosshair';/
+import './chart-plugins/chartjs-plugin-crosshair';
 import './chart-plugins/streaming/chartjs-plugin-streaming.min';
 
 import { ChartJsSingleGraphData } from '../app.component';
@@ -50,11 +50,30 @@ export class ChartComponent implements OnInit, AfterViewInit, OnDestroy {
   config: Chart.ChartConfiguration | null = null;
 
 
+  @Input() set isPause(val: boolean) {
+    if (this.myChart) {
+      this.myChart.options.scales.xAxes[0].realtime.pause = val;
+      if (val) {
+        this.myChart.options.plugins.crosshair.sync.group = 1;
+        this.myChart.options.plugins.crosshair.line.color = '#F66';
+      } else {
+        this.myChart.options.plugins.crosshair.sync.group = this.graphIdx;
+        this.myChart.options.plugins.crosshair.line.color = 'rgb(0,0,0,0)';
+      }
+
+      this.myChart.update();
+    }
+  }
+
+
   @Input() set chartType(val: ChartType) {
-    this.changeGraphType(val)
+    if (this.myChart) {
+      this.changeGraphType(val)
+    }
   }
 
   @Input() title: string | null = null;
+  @Input() graphIdx: number;
 
 
 
@@ -70,13 +89,12 @@ export class ChartComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
 
-  constructor() { }
-  ngOnDestroy(): void {
-    this.myChart.destroy()
-  }
+  constructor(private cd: ChangeDetectorRef) { }
+
 
   ngOnInit(): void {
-
+    this.cd.detach();
+    this.cd.checkNoChanges();
   }
 
   ngAfterViewInit(): void {
@@ -145,7 +163,7 @@ export class ChartComponent implements OnInit, AfterViewInit, OnDestroy {
             type: "realtime",
             realtime: {
               duration: 60000,
-              ttl: 70000,
+              // ttl: 70000,
               // refresh: 3500,
               //  delay: 2000,
               frameRate: 1,
@@ -194,12 +212,12 @@ export class ChartComponent implements OnInit, AfterViewInit, OnDestroy {
         plugins: {
           crosshair: {
             line: {
-              color: '#F66',  // crosshair line color
-              width: 1        // crosshair line width
+              color: 'rgba(0,0,0,0)',  // crosshair line color
+              width: 0        // crosshair line width
             },
             sync: {
               enabled: true,            // enable trace line syncing with other charts
-              group: 1,                 // chart group
+              group: this.graphIdx,                 // chart group
               suppressTooltips: false   // suppress tooltips when showing a synced tracer
             }
           },
@@ -265,9 +283,10 @@ export class ChartComponent implements OnInit, AfterViewInit, OnDestroy {
 
   changeGraphType(type: ChartType) {
     if (this.myChart) {
-      const data = this.myChart.data
+      const data = this.myChart.data;
+      const options = this.myChart.options
       this.myChart.destroy();
-      this.myChart = new Chart(this.ctx, { ...this.config, type, data });
+      this.myChart = new Chart(this.ctx, { ...this.config, type, data, options });
     }
 
 
@@ -300,6 +319,10 @@ export class ChartComponent implements OnInit, AfterViewInit, OnDestroy {
 
   randomScalingFactor() {
     return (Math.random() > 0.5 ? 1.0 : -1.0) * Math.round(Math.random() * 100);
+  }
+
+  ngOnDestroy(): void {
+    this.myChart.destroy()
   }
 
 }

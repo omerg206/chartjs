@@ -139,7 +139,7 @@ function TracePlugin(Chart) {
 			suppressTooltips: false
 		},
 		zoom: {
-			enabled: true,
+			enabled: false,
 			zoomboxBackgroundColor: 'rgba(66,133,244,0.2)',
 			zoomboxBorderColor: '#48F',
 			zoomButtonText: 'Reset Zoom',

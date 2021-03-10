@@ -1,6 +1,6 @@
 import { ChartType } from 'chart.js';
 import { KeyValue } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 
 export interface rawChartData {
   title: string;
@@ -31,7 +31,7 @@ export interface ChartJsDataCollection {
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit, OnDestroy {
 
@@ -47,12 +47,16 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ]
 
+  isPause: boolean = false;
   graphType: ChartType = 'bar'
   intervalId: any;
   rawData: rawChartData[] = [];
   chartJsData: ChartJsDataCollection = {};
   timeFrameMilliSec: number = 1 * 60 * 1000;
 
+  constructor(private cd: ChangeDetectorRef){
+
+  }
 
   ngOnInit(): void {
     this.intervalId = setInterval(() => { this.updateDate() }, 1000)
@@ -115,6 +119,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
   onchangeGraphType(graphType: ChartType) {
     this.graphType =graphType
+  }
+
+  onPauseOrPlay() {
+    this.isPause = !this.isPause;
   }
 
   ngOnDestroy(): void {
