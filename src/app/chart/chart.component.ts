@@ -1,9 +1,9 @@
 import { Component, OnInit, ChangeDetectionStrategy, AfterViewInit, ElementRef, ViewChild, Input } from '@angular/core';
-import { ChartType, Chart, ChartDataSets } from 'chart.js';
+import { ChartType, Chart, ChartDataSets, ScaleType } from 'chart.js';
 import 'chartjs-plugin-zoom';
 // import 'chartjs-plugin-streaming';
-import './chart-plugins/chartjs-plugin-crosshair';
-import '@taeuk-gang/chartjs-plugin-streaming';
+// import './chart-plugins/chartjs-plugin-crosshair';/
+ import './chart-plugins/streaming/chartjs-plugin-streaming.min';
 
 import { ChartJsSingleGraphData } from '../app.component';
 import { forEach } from 'lodash';
@@ -64,7 +64,7 @@ export class ChartComponent implements OnInit, AfterViewInit {
     }
     this.updateDate(val);
 
-  };
+    };
 
   @ViewChild('graph', { static: true, read: ElementRef }) graph!: ElementRef;
 
@@ -97,7 +97,7 @@ export class ChartComponent implements OnInit, AfterViewInit {
         datasets: [
 
         ]
-      },
+        },
       options: {
         elements: {
           line: {
@@ -141,9 +141,9 @@ export class ChartComponent implements OnInit, AfterViewInit {
             realtime: {
               duration: 60000,
             ttl: 60000,
-            refresh: 1000,
-            delay: 0,
-            frameRate: 0,
+            refresh: 3500,
+             delay: 2000,
+            frameRate: 1,
 
 
           },
@@ -151,6 +151,7 @@ export class ChartComponent implements OnInit, AfterViewInit {
             unit: 'second',
             // round: 'second',
             stepSize: 5,
+            unitStepSize: 5,
             displayFormats: {
               second: "HH:mm:ss"
             },
@@ -190,30 +191,24 @@ export class ChartComponent implements OnInit, AfterViewInit {
             enabled: true,            // enable trace line syncing with other charts
             group: 1,                 // chart group
             suppressTooltips: false   // suppress tooltips when showing a synced tracer
-          },
-          zoom: {
-            enable: true,
-            zoomboxBackgroundColor: 'red',
           }
         },
         zoom: {
           // Container for pan options
-          // pan: {
-          //   // Boolean to enable panning
-          //   enabled: true,
+          pan: {
+            // Boolean to enable panning
+            enabled: true,
 
-          //   // Panning directions. Remove the appropriate direction to disable
-          //   // Eg. 'y' would only allow panning in the y direction
-          //   mode: 'xy',
-          //   // rangeMax: {
-          //   //   x: Date.now() + 1* 60*1000,
-          //   //   y: 10
-          //   // },
-          //   // rangeMin: {
-          //   //   x: Date.now() - 1* 60*1000,
-          //   //   y:0
-          //   // }
-          // },
+            // Panning directions. Remove the appropriate direction to disable
+            // Eg. 'y' would only allow panning in the y direction
+            mode: 'xy',
+            // rangeMax: {
+            //   x: 1200000,
+            // },
+            // rangeMin: {
+            //   x: 1000,
+            // },
+          },
 
           // Container for zoom options
           zoom: {
@@ -232,14 +227,12 @@ export class ChartComponent implements OnInit, AfterViewInit {
             // Zooming directions. Remove the appropriate direction to disable
             // Eg. 'y' would only allow zooming in the y direction
             mode: 'xy',
-            // rangeMax: {
-            //   x: Date.now() + 1* 60*1000,
-            //   y: 10
-            // },
-            // rangeMin: {
-            //   x: Date.now() - 1* 60*1000,
-            //   y:0
-            // },
+            rangeMax: {
+              x: 60000,
+            },
+            rangeMin: {
+              x: 1000,
+            },
             threshold: 10,
             //  onZoom: function({chart}: {chart: Chart}) {
             //   chart.options.plugins.zoom.zoom.rangeMax =  Date.now() + 1*60*1000;
@@ -260,10 +253,11 @@ export class ChartComponent implements OnInit, AfterViewInit {
   }
 
 
-changeGraphType(graphType: ChartType) {
+  changeGraphType(type: ChartType) {
   if (this.myChart) {
+    const data = this.myChart.data
     this.myChart.destroy();
-    this.myChart = new Chart(this.ctx, { ...this.config, type: graphType });
+    this.myChart = new Chart(this.ctx, { ...this.config, type, data });
   }
 
 
