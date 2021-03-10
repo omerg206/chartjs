@@ -128,7 +128,7 @@ export class ChartComponent implements OnInit, AfterViewInit, OnDestroy {
         animation: {
           animateScale: true,
           animateRotate: true,
-          duration: 0 // general animation time
+          duration: 1 // general animation time
         },
         hover: {
           animationDuration: 0 // duration of animations when hovering an item
@@ -142,26 +142,26 @@ export class ChartComponent implements OnInit, AfterViewInit, OnDestroy {
             display: true,
             offset: true,
             // distribution: 'series',
-            type: "time",
+            type: "realtime",
             realtime: {
               duration: 60000,
-              ttl: 60000,
-              // refresh: 100,
+              ttl: 70000,
+              // refresh: 3500,
               //  delay: 2000,
-              // frameRate: 1,
-              onRefresh: (e) => {
-                // console.log(chart:);
-                this.myChart.render({ duration: 0, lazy: true })
+              frameRate: 1,
+              // onRefresh: (e) => {
+              //   // console.log(chart:);
+              //   this.myChart.render({ duration: 0, lazy: true })
 
-              }
+              // }
 
 
             },
             time: {
               unit: 'second',
               // round: 'second',
-              stepSize: 5,
-              unitStepSize: 5,
+              stepSize: 15,
+              unitStepSize: 15,
               displayFormats: {
                 second: "HH:mm:ss"
               },
@@ -212,12 +212,12 @@ export class ChartComponent implements OnInit, AfterViewInit, OnDestroy {
               // Panning directions. Remove the appropriate direction to disable
               // Eg. 'y' would only allow panning in the y direction
               mode: 'xy',
-              // rangeMax: {
-              //   x: 1200000,
-              // },
-              // rangeMin: {
-              //   x: 1000,
-              // },
+              rangeMax: {
+                x: 60000,
+              },
+              rangeMin: {
+                x: 1000,
+              },
             },
 
             // Container for zoom options
