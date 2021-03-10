@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy, AfterViewInit, ElementRef, 
 import { ChartType, Chart, ChartDataSets, ScaleType } from 'chart.js';
 import 'chartjs-plugin-zoom';
 // import 'chartjs-plugin-streaming';
-import './chart-plugins/chartjs-plugin-crosshair';
+// import './chart-plugins/chartjs-plugin-crosshair';
 import './chart-plugins/streaming/chartjs-plugin-streaming.min';
 
 import { ChartJsSingleGraphData } from '../app.component';
@@ -53,13 +53,13 @@ export class ChartComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() set isPause(val: boolean) {
     if (this.myChart) {
       this.myChart.options.scales.xAxes[0].realtime.pause = val;
-      if (val) {
-        this.myChart.options.plugins.crosshair.sync.group = 1;
-        this.myChart.options.plugins.crosshair.line.color = '#F66';
-      } else {
-        this.myChart.options.plugins.crosshair.sync.group = this.graphIdx;
-        this.myChart.options.plugins.crosshair.line.color = 'rgb(0,0,0,0)';
-      }
+      // if (val) {
+      //   this.myChart.options.plugins.crosshair.sync.group = 1;
+      //   this.myChart.options.plugins.crosshair.line.color = '#F66';
+      // } else {
+      //   this.myChart.options.plugins.crosshair.sync.group = this.graphIdx;
+      //   this.myChart.options.plugins.crosshair.line.color = 'rgb(0,0,0,0)';
+      // }
 
       this.myChart.update();
     }
@@ -210,17 +210,17 @@ export class ChartComponent implements OnInit, AfterViewInit, OnDestroy {
           }]
         },
         plugins: {
-          crosshair: {
-            line: {
-              color: 'rgba(0,0,0,0)',  // crosshair line color
-              width: 0        // crosshair line width
-            },
-            sync: {
-              enabled: true,            // enable trace line syncing with other charts
-              group: this.graphIdx,                 // chart group
-              suppressTooltips: false   // suppress tooltips when showing a synced tracer
-            }
-          },
+          // crosshair: {
+          //   line: {
+          //     color: 'rgba(0,0,0,0)',  // crosshair line color
+          //     width: 0        // crosshair line width
+          //   },
+          //   sync: {
+          //     enabled: true,            // enable trace line syncing with other charts
+          //     group: this.graphIdx,                 // chart group
+          //     suppressTooltips: false   // suppress tooltips when showing a synced tracer
+          //   }
+          // },
           zoom: {
             // Container for pan options
             pan: {
