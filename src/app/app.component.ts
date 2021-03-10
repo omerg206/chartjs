@@ -51,7 +51,7 @@ export class AppComponent implements OnInit, OnDestroy {
   intervalId: any;
   rawData: rawChartData[] = [];
   chartJsData: ChartJsDataCollection = {};
-  timeFrameMilliSec: number = 3 * 60 * 1000;
+  timeFrameMilliSec: number = 1 * 60 * 1000;
 
 
   ngOnInit(): void {
@@ -63,7 +63,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   updateDate() {
     const maxAllowedDate = Date.now() - this.timeFrameMilliSec;
-    this.rawData = this.rawData
+    this.rawData = this.rawData.filter((ele) => ele.date >= maxAllowedDate)
 
     this.graphs.forEach((graph: { title: string, stackNumber?: number }) => {
 

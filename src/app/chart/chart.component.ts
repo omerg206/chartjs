@@ -1,9 +1,9 @@
-import { Component, OnInit, ChangeDetectionStrategy, AfterViewInit, ElementRef, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, AfterViewInit, ElementRef, ViewChild, Input, OnDestroy } from '@angular/core';
 import { ChartType, Chart, ChartDataSets, ScaleType } from 'chart.js';
 import 'chartjs-plugin-zoom';
 // import 'chartjs-plugin-streaming';
 // import './chart-plugins/chartjs-plugin-crosshair';/
- import './chart-plugins/streaming/chartjs-plugin-streaming.min';
+import './chart-plugins/streaming/chartjs-plugin-streaming.min';
 
 import { ChartJsSingleGraphData } from '../app.component';
 import { forEach } from 'lodash';
@@ -44,7 +44,7 @@ const COLORS: Pick<ChartDataSets, 'backgroundColor' | "hoverBackgroundColor" | "
 })
 
 
-export class ChartComponent implements OnInit, AfterViewInit {
+export class ChartComponent implements OnInit, AfterViewInit, OnDestroy {
   ctx: CanvasRenderingContext2D | null = null;
   myChart: Chart | null = null;
   config: Chart.ChartConfiguration | null = null;
@@ -64,13 +64,16 @@ export class ChartComponent implements OnInit, AfterViewInit {
     }
     this.updateDate(val);
 
-    };
+  };
 
   @ViewChild('graph', { static: true, read: ElementRef }) graph!: ElementRef;
 
 
 
   constructor() { }
+  ngOnDestroy(): void {
+    this.myChart.destroy()
+  }
 
   ngOnInit(): void {
 
@@ -97,7 +100,7 @@ export class ChartComponent implements OnInit, AfterViewInit {
         datasets: [
 
         ]
-        },
+      },
       options: {
         elements: {
           line: {
@@ -123,7 +126,9 @@ export class ChartComponent implements OnInit, AfterViewInit {
           intersect: false
         },
         animation: {
-           duration: 500 // general animation time
+          animateScale: true,
+          animateRotate: true,
+          duration: 0 // general animation time
         },
         hover: {
           animationDuration: 0 // duration of animations when hovering an item
@@ -137,116 +142,121 @@ export class ChartComponent implements OnInit, AfterViewInit {
             display: true,
             offset: true,
             // distribution: 'series',
-            type: "realtime",
+            type: "time",
             realtime: {
               duration: 60000,
-            ttl: 60000,
-            refresh: 3500,
-             delay: 2000,
-            frameRate: 1,
+              ttl: 60000,
+              // refresh: 100,
+              //  delay: 2000,
+              // frameRate: 1,
+              onRefresh: (e) => {
+                // console.log(chart:);
+                this.myChart.render({ duration: 0, lazy: true })
+
+              }
 
 
-          },
-          time: {
-            unit: 'second',
-            // round: 'second',
-            stepSize: 5,
-            unitStepSize: 5,
-            displayFormats: {
-              second: "HH:mm:ss"
             },
-            // parser: "ss",
-            scaleLabel: {
-              display: true,
-              labelString: "Date"
-            },
-            ticks: {
-              autoSkip: true,
-              maxRotation: 0,
-              minRotation: 0
+            time: {
+              unit: 'second',
+              // round: 'second',
+              stepSize: 5,
+              unitStepSize: 5,
+              displayFormats: {
+                second: "HH:mm:ss"
+              },
+              // parser: "ss",
+              scaleLabel: {
+                display: true,
+                labelString: "Date"
+              },
+              ticks: {
+                autoSkip: true,
+                maxRotation: 0,
+                minRotation: 0
+              }
+
             }
+          }],
+          yAxes: [{
+            stacked: true,
+            display: true,
+            scaleLabel: {
+              display: false,
+              labelString: 'value'
+            },
+            // ticks: {
+            //   // beginAtZero: true
+            // }
 
-          }
-        }],
-        yAxes: [{
-          stacked: true,
-          display: true,
-          scaleLabel: {
-            display: false,
-            labelString: 'value'
-          },
-          // ticks: {
-          //   // beginAtZero: true
-          // }
-
-        }]
-      },
-      plugins: {
-        crosshair: {
-          line: {
-            color: '#F66',  // crosshair line color
-            width: 1        // crosshair line width
-          },
-          sync: {
-            enabled: true,            // enable trace line syncing with other charts
-            group: 1,                 // chart group
-            suppressTooltips: false   // suppress tooltips when showing a synced tracer
-          }
+          }]
         },
-        zoom: {
-          // Container for pan options
-          pan: {
-            // Boolean to enable panning
-            enabled: true,
-
-            // Panning directions. Remove the appropriate direction to disable
-            // Eg. 'y' would only allow panning in the y direction
-            mode: 'xy',
-            // rangeMax: {
-            //   x: 1200000,
-            // },
-            // rangeMin: {
-            //   x: 1000,
-            // },
+        plugins: {
+          crosshair: {
+            line: {
+              color: '#F66',  // crosshair line color
+              width: 1        // crosshair line width
+            },
+            sync: {
+              enabled: true,            // enable trace line syncing with other charts
+              group: 1,                 // chart group
+              suppressTooltips: false   // suppress tooltips when showing a synced tracer
+            }
           },
-
-          // Container for zoom options
           zoom: {
-            // Boolean to enable zooming
-            enabled: true,
-            // drag: {
-            //   // Drag-to-zoom effect can be customized
-            //   drag: {
-            //     borderColor: 'rgba(225,225,225,0.3)',
-            //     borderWidth: 5,
-            //     backgroundColor: 'rgb(225,225,225)',
-            //     animationDuration: 0
-            //   }
-            // },
+            // Container for pan options
+            pan: {
+              // Boolean to enable panning
+              enabled: true,
 
-            // Zooming directions. Remove the appropriate direction to disable
-            // Eg. 'y' would only allow zooming in the y direction
-            mode: 'xy',
-            rangeMax: {
-              x: 60000,
+              // Panning directions. Remove the appropriate direction to disable
+              // Eg. 'y' would only allow panning in the y direction
+              mode: 'xy',
+              // rangeMax: {
+              //   x: 1200000,
+              // },
+              // rangeMin: {
+              //   x: 1000,
+              // },
             },
-            rangeMin: {
-              x: 1000,
-            },
-            threshold: 10,
-            //  onZoom: function({chart}: {chart: Chart}) {
-            //   chart.options.plugins.zoom.zoom.rangeMax =  Date.now() + 1*60*1000;
-            //   chart.options.plugins.zoom.zoom.rangeMin = Date.now() - 1*60*1000;
-            //   chart.options.plugins.zoom.pan.rangeMax =  Date.now() + 1*60*1000;
-            //   chart.options.plugins.zoom.pan.rangeMin = Date.now() - 1*60*1000;
-            //   console.log(chart);
-            //   chart.update()
-            //   },
+
+            // Container for zoom options
+            zoom: {
+              // Boolean to enable zooming
+              enabled: true,
+              // drag: {
+              //   // Drag-to-zoom effect can be customized
+              //   drag: {
+              //     borderColor: 'rgba(225,225,225,0.3)',
+              //     borderWidth: 5,
+              //     backgroundColor: 'rgb(225,225,225)',
+              //     animationDuration: 0
+              //   }
+              // },
+
+              // Zooming directions. Remove the appropriate direction to disable
+              // Eg. 'y' would only allow zooming in the y direction
+              mode: 'xy',
+              rangeMax: {
+                x: 60000,
+              },
+              rangeMin: {
+                x: 1000,
+              },
+              threshold: 10,
+              //  onZoom: function({chart}: {chart: Chart}) {
+              //   chart.options.plugins.zoom.zoom.rangeMax =  Date.now() + 1*60*1000;
+              //   chart.options.plugins.zoom.zoom.rangeMin = Date.now() - 1*60*1000;
+              //   chart.options.plugins.zoom.pan.rangeMax =  Date.now() + 1*60*1000;
+              //   chart.options.plugins.zoom.pan.rangeMin = Date.now() - 1*60*1000;
+              //   console.log(chart);
+              //   chart.update()
+              //   },
+            }
           }
         }
       }
     }
-  }
 
 
     this.myChart = new Chart(this.ctx, this.config);
@@ -254,42 +264,42 @@ export class ChartComponent implements OnInit, AfterViewInit {
 
 
   changeGraphType(type: ChartType) {
-  if (this.myChart) {
-    const data = this.myChart.data
-    this.myChart.destroy();
-    this.myChart = new Chart(this.ctx, { ...this.config, type, data });
+    if (this.myChart) {
+      const data = this.myChart.data
+      this.myChart.destroy();
+      this.myChart = new Chart(this.ctx, { ...this.config, type, data });
+    }
+
+
   }
 
 
-}
+
+  resetZoom() {
+    (this.myChart as any).resetZoom();
+    console.log(this.myChart);
+
+    // this.myChart.update({ duration: 0, lazy: true });
+  }
 
 
-
-resetZoom() {
-  (this.myChart as any).resetZoom();
-  console.log(this.myChart);
-
-  // this.myChart.update({ duration: 0, lazy: true });
-}
-
-
-updateDate(data: ChartJsSingleGraphData) {
-  let dataSetIdx = 0;
-  forEach(data, (ele: Chart.ChartPoint[], key: string) => {
-    if (!this.myChart.data.datasets[dataSetIdx]) {
-      this.myChart.data.datasets[dataSetIdx] = { ...COLORS[dataSetIdx], ...defaultDataSetOptions, label: `${defaultDataSetOptions.label} ${dataSetIdx + 1}` }
-    }
-    this.myChart.data.datasets[dataSetIdx].data = ele;
-    ++dataSetIdx;
-  })
+  updateDate(data: ChartJsSingleGraphData) {
+    let dataSetIdx = 0;
+    forEach(data, (ele: Chart.ChartPoint[], key: string) => {
+      if (!this.myChart.data.datasets[dataSetIdx]) {
+        this.myChart.data.datasets[dataSetIdx] = { ...COLORS[dataSetIdx], ...defaultDataSetOptions, label: `${defaultDataSetOptions.label} ${dataSetIdx + 1}` }
+      }
+      this.myChart.data.datasets[dataSetIdx].data = ele;
+      ++dataSetIdx;
+    })
 
 
-  // this.myChart.update();
-}
+    //  this.myChart.render({duration:0, lazy: true});
+  }
 
 
-randomScalingFactor() {
-  return (Math.random() > 0.5 ? 1.0 : -1.0) * Math.round(Math.random() * 100);
-}
+  randomScalingFactor() {
+    return (Math.random() > 0.5 ? 1.0 : -1.0) * Math.round(Math.random() * 100);
+  }
 
 }
