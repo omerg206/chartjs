@@ -77,13 +77,7 @@ export class ChartComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
 
-  @Input() set data(val: ChartJsSingleGraphData) {
-    if (!this.myChart) {
-      this.initChart();
-    }
-    this.updateDate(val);
-
-  };
+  @Input() data: ChartJsSingleGraphData;
 
   @ViewChild('graph', { static: true, read: ElementRef }) graph!: ElementRef;
 
@@ -146,7 +140,7 @@ export class ChartComponent implements OnInit, AfterViewInit, OnDestroy {
         animation: {
           animateScale: true,
           animateRotate: true,
-          duration: 1 // general animation time
+          duration: 0 // general animation time
         },
         hover: {
           animationDuration: 0 // duration of animations when hovering an item
@@ -167,12 +161,10 @@ export class ChartComponent implements OnInit, AfterViewInit, OnDestroy {
               // refresh: 3500,
               //  delay: 2000,
               frameRate: 1,
-              // onRefresh: (e) => {
-              //   // console.log(chart:);
-              //   this.myChart.render({ duration: 0, lazy: true })
-
-              // }
-
+              onRefresh: (e) => {
+                this.updateDate(this.data)
+                this.data = null;
+              }
 
             },
             time: {
@@ -189,9 +181,9 @@ export class ChartComponent implements OnInit, AfterViewInit, OnDestroy {
                 labelString: "Date"
               },
               ticks: {
-                autoSkip: true,
-                maxRotation: 0,
-                minRotation: 0
+                // autoSkip: true,
+                // maxRotation: 0,
+                // minRotation: 0
               }
 
             }
