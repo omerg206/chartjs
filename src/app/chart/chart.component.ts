@@ -160,7 +160,7 @@ export class ChartComponent implements OnInit, AfterViewInit, OnDestroy {
               // ttl: 70000,
               // refresh: 3500,
               //  delay: 2000,
-              frameRate: 1,
+              // frameRate: 1,
               onRefresh: (e) => {
                 this.updateDate(this.data)
                 this.data = null;
