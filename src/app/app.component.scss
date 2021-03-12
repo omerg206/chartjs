@@ -3,6 +3,8 @@
   width: 100%;
   background: #64595965;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 
   .header {
     background: rgb(50, 10, 224);
@@ -11,35 +13,33 @@
     height: 10%;
     align-items: center;
     width: 100%;
-    }
-
-  .grid{
-    height:88%;
-    width: 100%;
-    padding: 1%;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
-    row-gap: 5px;
-    column-gap: 5px;
-    background: antiquewhite;
-    // align-items: center;
-    // justify-items: center;
-
-    .chart{
-      width: 100%;
-    }
   }
 
+  .grid-container {
+    flex: 1;
+    .grid {
+      height: 100%;
+      width: 100%;
+      padding: 1%;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      row-gap: 5px;
+      column-gap: 5px;
+      background: antiquewhite;
+      // align-items: center;
+      // justify-items: center;
+
+      .chart {
+        width: 100%;
+      }
+    }
+  }
 }
-
-
-
 
 :host {
   display: block;
   height: 100%;
   width: 100%;
   padding: 0 1% 1% 1%;
-
 }

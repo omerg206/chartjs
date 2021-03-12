@@ -1,43 +1,48 @@
 <div class="container">
   <div class="header">Header</div>
+  <div>
+    <label for="graphTypes">Graph type</label>
 
-  <label for="graphTypes">Graph type</label>
-
-  <select [disabled]="isPause"
-    name="graphTypes"
-    id="graphTypes"
-    #selection
-    (change)="onchangeGraphType($any(selection.value))"
-  >
-    <option value="bar">Bar</option>
-    <option value="line">Line</option>
-  </select>
-
-  <input
-    type="checkbox"
-    id="playOrPause"
-    name="playOrPause"
-    value="playOrPause"
-    [checked]="isPause"
-    (click)="onPauseOrPlay()"
-  />
-  <label for="liveStream"> Pause</label>
-  <div class="grid">
-    <div
-      *ngFor="
-        let chart of chartJsData | keyvalue;
-        let index = index;
-        trackBy: trackByFn
-      "
-      class="chart"
+    <select
+      [disabled]="isPause"
+      name="graphTypes"
+      id="graphTypes"
+      #selection
+      (change)="onchangeGraphType($any(selection.value))"
     >
-      <app-chart
-        [graphIdx]="index"
-        [isPause]="isPause"
-        [chartType]="graphType"
-        [title]="chart.key"
-        [data]="chartJsData[chart.key]"
-      ></app-chart>
+      <option value="bar">Bar</option>
+      <option value="line">Line</option>
+    </select>
+
+    <input
+      type="checkbox"
+      id="playOrPause"
+      name="playOrPause"
+      value="playOrPause"
+      [checked]="isPause"
+      (click)="onPauseOrPlay()"
+    />
+    <label for="liveStream"> Pause</label>
+  </div>
+
+  <div class="grid-container">
+    <div class="grid">
+      <div
+        *ngFor="
+          let chart of chartJsData | keyvalue;
+          let index = index;
+          trackBy: trackByFn
+        "
+        class="chart"
+      >
+        <app-chart
+          [graphIdx]="index"
+          [isPause]="isPause"
+          [chartType]="graphType"
+          [title]="chart.key"
+          [data]="chartJsData[chart.key]"
+        ></app-chart>
+      </div>
     </div>
   </div>
 </div>
