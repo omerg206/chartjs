@@ -1,9 +1,9 @@
 import { Component, OnInit, ChangeDetectionStrategy, AfterViewInit, ElementRef, ViewChild, Input, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { ChartType, Chart, ChartDataSets, ScaleType } from 'chart.js';
 import 'chartjs-plugin-zoom';
-// import 'chartjs-plugin-streaming';
+import 'chartjs-plugin-streaming';
 // import './chart-plugins/chartjs-plugin-crosshair';
-import './chart-plugins/streaming/chartjs-plugin-streaming.min';
+// import './chart-plugins/streaming/chartjs-plugin-streaming.min';
 
 import { ChartJsSingleGraphData } from '../app.component';
 import { forEach } from 'lodash';
@@ -120,7 +120,6 @@ export class ChartComponent implements OnInit, AfterViewInit, OnDestroy {
           }
         },
         legend: {
-          align: 'start',
           fullWidth: false,
           labels: {
             boxWidth: 10
@@ -131,7 +130,8 @@ export class ChartComponent implements OnInit, AfterViewInit, OnDestroy {
         maintainAspectRatio: false,
         title: {
           display: true,
-          text: this.title
+          text: this.title,
+          position: 'left'
         },
         tooltips: {
           mode: 'index',
@@ -153,6 +153,7 @@ export class ChartComponent implements OnInit, AfterViewInit, OnDestroy {
             stacked: true,
             display: true,
             offset: true,
+
             // distribution: 'series',
             type: "realtime",
             realtime: {
@@ -160,7 +161,7 @@ export class ChartComponent implements OnInit, AfterViewInit, OnDestroy {
               // ttl: 70000,
               // refresh: 3500,
               //  delay: 2000,
-              // frameRate: 1,
+               frameRate: 1,
               onRefresh: (e) => {
                 this.updateDate(this.data)
                 this.data = null;
@@ -195,9 +196,11 @@ export class ChartComponent implements OnInit, AfterViewInit, OnDestroy {
               display: false,
               labelString: 'value'
             },
-            // ticks: {
-            //   // beginAtZero: true
-            // }
+            ticks: {
+              suggestedMax: 100,
+              suggestedMin: 0,
+              // beginAtZero: true
+            }
 
           }]
         },
@@ -308,10 +311,6 @@ export class ChartComponent implements OnInit, AfterViewInit, OnDestroy {
     //  this.myChart.render({duration:0, lazy: true});
   }
 
-
-  randomScalingFactor() {
-    return (Math.random() > 0.5 ? 1.0 : -1.0) * Math.round(Math.random() * 100);
-  }
 
   ngOnDestroy(): void {
     this.myChart.destroy()
