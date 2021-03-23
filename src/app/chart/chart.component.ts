@@ -7,6 +7,7 @@ import 'chartjs-plugin-streaming';
 
 import { ChartJsSingleGraphData } from '../app.component';
 import { forEach } from 'lodash';
+import { ChartsService } from '../charts.service';
 
 
 const defaultDataSetOptions: Pick<ChartDataSets, "hoverBorderWidth" | "borderJoinStyle" | "label"> = {
@@ -83,12 +84,36 @@ export class ChartComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
 
-  constructor(private cd: ChangeDetectorRef) { }
+  constructor(private cd: ChangeDetectorRef, private chartsService: ChartsService) { }
 
 
   ngOnInit(): void {
     this.cd.detach();
     this.cd.checkNoChanges();
+
+    // setTimeout(() => {
+    //   // this.myChart.options.scales.yAxes[0].ticks.suggestedMax= 300;
+    //   // this.myChart.options.scales.yAxes[0].ticks.suggestedMin= 0;
+    //   // this.myChart.options.scales.xAxes[0].ticks.max= 300;
+    //   // this.myChart.options.scales.xAxes[0].ticks.min= 0;
+    //   //@ts-ignore
+    //   this.myChart.scales["x-axis-0"]._table[0].time = 5000;
+    //   //@ts-ignore
+    //   this.myChart.scales["x-axis-0"].ticks = ["11:50:45", "11:51 am"];
+    //   //@ts-ignore
+    //   this.myChart.scales["x-axis-0"]._table[1].time = 10000;
+    //   //@ts-ignore
+    //   console.log(this.myChart, this.myChart.scales["x-axis-0"]._table[1].time)
+    //   this.myChart.update();
+    // }, 3000)
+
+    // setInterval(() => {
+    //   // this.myChart.options.scales.yAxes[0].ticks.suggestedMax= 300;
+    //   // this.myChart.options.scales.yAxes[0].ticks.suggestedMin= 0;
+    //   this.myChart.options.scales.yAxes[0].ticks.max= undefined;
+    //   this.myChart.options.scales.yAxes[0].ticks.min= undefined;
+    //   this.myChart.update();
+    // }, 6000)
   }
 
   ngAfterViewInit(): void {
@@ -161,7 +186,7 @@ export class ChartComponent implements OnInit, AfterViewInit, OnDestroy {
               // ttl: 70000,
               // refresh: 3500,
               //  delay: 2000,
-               frameRate: 1,
+              //  frameRate: 1,
               onRefresh: (e) => {
                 this.updateDate(this.data)
                 this.data = null;
@@ -231,6 +256,7 @@ export class ChartComponent implements OnInit, AfterViewInit, OnDestroy {
               rangeMin: {
                 x: 1000,
               },
+              onPan:  () => this.onPanAndZoomSyncAllGraphs()
             },
 
             // Container for zoom options
@@ -257,20 +283,12 @@ export class ChartComponent implements OnInit, AfterViewInit, OnDestroy {
                 x: 1000,
               },
               threshold: 10,
-              //  onZoom: function({chart}: {chart: Chart}) {
-              //   chart.options.plugins.zoom.zoom.rangeMax =  Date.now() + 1*60*1000;
-              //   chart.options.plugins.zoom.zoom.rangeMin = Date.now() - 1*60*1000;
-              //   chart.options.plugins.zoom.pan.rangeMax =  Date.now() + 1*60*1000;
-              //   chart.options.plugins.zoom.pan.rangeMin = Date.now() - 1*60*1000;
-              //   console.log(chart);
-              //   chart.update()
-              //   },
+              onZoom: () => this.onPanAndZoomSyncAllGraphs()
             }
           }
         }
       }
     }
-
 
     this.myChart = new Chart(this.ctx, this.config);
   }
@@ -283,6 +301,16 @@ export class ChartComponent implements OnInit, AfterViewInit, OnDestroy {
       this.myChart.destroy();
       this.myChart = new Chart(this.ctx, { ...this.config, type, data, options });
     }
+  }
+
+  onPanAndZoomSyncAllGraphs(){
+     //@ts-ignore
+     const { max: maxY, min: minY } = this.myChart.scales['y-axis-0'];
+     //@ts-ignore
+     const {duration,delay} = this.myChart.scales['x-axis-0'].options.realtime;
+
+    //@ts-ignore;
+     this.chartsService.updateCharts({ maxY, minY, duration, delay, chartId: this.myChart.id });
 
 
   }
@@ -290,8 +318,10 @@ export class ChartComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   resetZoom() {
+    this.myChart.options.scales.yAxes[0].ticks.max = undefined;
+    this.myChart.options.scales.yAxes[0].ticks.min = undefined;
+
     (this.myChart as any).resetZoom();
-    console.log(this.myChart);
 
     // this.myChart.update({ duration: 0, lazy: true });
   }
