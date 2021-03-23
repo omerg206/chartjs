@@ -22,7 +22,27 @@
       [checked]="isPause"
       (click)="onPauseOrPlay()"
     />
-    <label for="liveStream"> Pause</label>
+    <label for="playOrPause"> Pause</label>
+
+    <input
+    type="checkbox"
+    id="isSyncGrahps"
+    name="isSyncGraphs"
+    value="isSyncGraphs"
+    [checked]="isSyncGraphs"
+    (click)="onIsSyncGraphs()"
+  />
+  <label for="isSyncGraphs"> Sync</label>
+
+  <input
+  type="checkbox"
+  id="isZoomBox"
+  name="isZoomBox"
+  value="isZoomBox"
+  [checked]="isZoomBox"
+  (click)="onIsZoomBox()"
+/>
+<label for="isZoomBox"> Zoom box</label>
   </div>
 
   <div class="grid-container">
@@ -38,6 +58,8 @@
         <app-chart
           [graphIdx]="index"
           [isPause]="isPause"
+          [isZoomBox]="isZoomBox"
+          [isSyncGraphs]="isSyncGraphs"
           [chartType]="graphType"
           [title]="chart.key"
           [data]="chartJsData[chart.key]"

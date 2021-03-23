@@ -48,6 +48,8 @@ export class AppComponent implements OnInit, OnDestroy {
   ]
 
   isPause: boolean = false;
+  isSyncGraphs: boolean = false;
+  isZoomBox: boolean = false;
   graphType: ChartType = 'bar'
   intervalId: any;
   rawData: rawChartData[] = [];
@@ -123,6 +125,13 @@ export class AppComponent implements OnInit, OnDestroy {
 
   onPauseOrPlay() {
     this.isPause = !this.isPause;
+  }
+
+  onIsSyncGraphs() {
+    this.isSyncGraphs = !this.isSyncGraphs;
+  }
+  onIsZoomBox() {
+    this.isZoomBox = !this.isZoomBox;
   }
 
   ngOnDestroy(): void {

@@ -8,7 +8,7 @@ export class ChartsService {
 
   constructor() { }
 
-  updateCharts({maxY, minY, duration,delay,  chartId}){
+  updateCharts({maxY, minY, duration,delay,  chartId,}){
 
 
     Chart.helpers.each(Chart.instances,  (instance) => {
@@ -17,7 +17,9 @@ export class ChartsService {
         instance.options.scales.yAxes[0].ticks.min= minY;
 
         //@ts-ignore
-        instance.scales["x-axis-0"].options.realtime= {duration, delay};
+        instance.scales["x-axis-0"].options.realtime.duration= duration ;
+        //@ts-ignore
+        instance.scales["x-axis-0"].options.realtime.delay= delay ;
         instance.update();
       }
 

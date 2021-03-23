@@ -50,19 +50,30 @@ export class ChartComponent implements OnInit, AfterViewInit, OnDestroy {
   myChart: Chart | null = null;
   config: Chart.ChartConfiguration | null = null;
 
+  @Input() isSyncGraphs: boolean
+
 
   @Input() set isPause(val: boolean) {
     if (this.myChart) {
       this.myChart.options.scales.xAxes[0].realtime.pause = val;
-      // if (val) {
-      //   this.myChart.options.plugins.crosshair.sync.group = 1;
-      //   this.myChart.options.plugins.crosshair.line.color = '#F66';
-      // } else {
-      //   this.myChart.options.plugins.crosshair.sync.group = this.graphIdx;
-      //   this.myChart.options.plugins.crosshair.line.color = 'rgb(0,0,0,0)';
-      // }
-
       this.myChart.update();
+    }
+  }
+
+  @Input() set isZoomBox(val: boolean) {
+    if (this.myChart) {
+      if (val) {
+        this.myChart.options.plugins.zoom.pan.enabled = false;
+        this.myChart.options.plugins.zoom.zoom.drag = {
+              borderColor: 'rgba(225,225,225,0.3)',
+              borderWidth: 5,
+              backgroundColor: 'rgb(225,225,225)',
+              animationDuration: 0
+            };
+      } else {
+        this.myChart.options.plugins.zoom.pan.enabled = true;
+        this.myChart.options.plugins.zoom.zoom.drag = false;
+      }
     }
   }
 
@@ -160,7 +171,7 @@ export class ChartComponent implements OnInit, AfterViewInit, OnDestroy {
         },
         tooltips: {
           mode: 'index',
-          intersect: false
+          intersect: true
         },
         animation: {
           animateScale: true,
@@ -256,7 +267,7 @@ export class ChartComponent implements OnInit, AfterViewInit, OnDestroy {
               rangeMin: {
                 x: 1000,
               },
-              onPan:  () => this.onPanAndZoomSyncAllGraphs()
+              onPan: () => this.onPanAndZoomSyncAllGraphs()
             },
 
             // Container for zoom options
@@ -303,16 +314,16 @@ export class ChartComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  onPanAndZoomSyncAllGraphs(){
-     //@ts-ignore
-     const { max: maxY, min: minY } = this.myChart.scales['y-axis-0'];
-     //@ts-ignore
-     const {duration,delay} = this.myChart.scales['x-axis-0'].options.realtime;
+  onPanAndZoomSyncAllGraphs() {
+    if (this.isSyncGraphs) {
+      //@ts-ignore
+      const { max: maxY, min: minY } = this.myChart.scales['y-axis-0'];
+      //@ts-ignore
+      const { duration, delay } = this.myChart.scales['x-axis-0'].options.realtime;
 
-    //@ts-ignore;
-     this.chartsService.updateCharts({ maxY, minY, duration, delay, chartId: this.myChart.id });
-
-
+      //@ts-ignore;
+      this.chartsService.updateCharts({ maxY, minY, duration, delay, chartId: this.myChart.id });
+    }
   }
 
 

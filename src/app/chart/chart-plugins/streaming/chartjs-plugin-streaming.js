@@ -28,7 +28,7 @@ var cancelAnimFrame = (function() {
 	}
 }());
 
-var StreagHelper = {
+var StreamingHelper = {
 
 	startFrameRefreshTimer: function(context, func) {
 		if (!context.frameRequestID) {

@@ -3,6 +3,7 @@ declare namespace Chart {
 
   interface ChartPluginsOptions {
     crosshair?: CrossHairPlugin
+    zoom?: any
   }
   interface CrossHairPlugin {
     line?: {
